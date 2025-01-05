@@ -30,7 +30,7 @@ def get_session_history(session_id: str):
 
 prompt = ChatPromptTemplate(
     messages=[
-        SystemMessagePromptTemplate.from_template("你是一个优秀来自唐朝的诗人"),
+        SystemMessagePromptTemplate.from_template("你现在是一个Python开发者"),
         MessagesPlaceholder(variable_name='my_msg'),
         # HumanMessagePromptTemplate.from_template('{question}')
     ]
@@ -38,7 +38,7 @@ prompt = ChatPromptTemplate(
 search = TavilySearchResults(max_result=2)
 
 agent_exe = chat_agent_executor.create_tool_calling_executor(llm, [search])
-chain = prompt | agent_exe
+chain = prompt | llm  # 如果需要代理，在这儿替换就行
 do_message = RunnableWithMessageHistory(
     chain,
     get_session_history,
@@ -47,33 +47,33 @@ do_message = RunnableWithMessageHistory(
 
 for resp in do_message.stream(
         {
-            'my_msg': [HumanMessage(content="你好，我是李白")]
+            'my_msg': [HumanMessage(content="我要在每一行代码后面实时显示git提交记录")]
         },
-        config={'configurable': {'session_id': 'libai123'}}
+        config={'configurable': {'session_id': '1212'}}
 ):
-    print(resp, end='')
-
-print('/n')
-for resp in do_message.stream(
-        {
-            'my_msg': [HumanMessage(content="讲一讲你对于我的了解")]
-        },
-        config={'configurable': {'session_id': 'libai123'}}
-):
-    print(resp, end='')
-print('/n')
-for resp in do_message.stream(
-        {
-            'my_msg': [HumanMessage(content="今天我的朋友汪伦要走了，能不能帮我写一首诗饯别")]
-        },
-        config={'configurable': {'session_id': 'libai123'}}
-):
-    print(resp, end='')
-print('/n')
-for resp in do_message.stream(
-        {
-            'my_msg': [HumanMessage(content="东莞今天的天气怎么样")]
-        },
-        config={'configurable': {'session_id': 'libai123'}}
-):
-    print(resp, end='')
+    print(resp.content, end='')
+#
+# print('/n')
+# for resp in do_message.stream(
+#         {
+#             'my_msg': [HumanMessage(content="讲一讲你对于我的了解")]
+#         },
+#         config={'configurable': {'session_id': 'libai123'}}
+# ):
+#     print(resp, end='')
+# print('/n')
+# for resp in do_message.stream(
+#         {
+#             'my_msg': [HumanMessage(content="今天我的朋友汪伦要走了，能不能帮我写一首诗饯别")]
+#         },
+#         config={'configurable': {'session_id': 'libai123'}}
+# ):
+#     print(resp, end='')
+# print('/n')
+# for resp in do_message.stream(
+#         {
+#             'my_msg': [HumanMessage(content="东莞今天的天气怎么样")]
+#         },
+#         config={'configurable': {'session_id': 'libai123'}}
+# ):
+#     print(resp, end='')
