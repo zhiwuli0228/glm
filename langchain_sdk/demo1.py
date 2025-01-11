@@ -42,7 +42,7 @@ chain = prompt | llm  # 如果需要代理，在这儿替换就行
 do_message = RunnableWithMessageHistory(
     chain,
     get_session_history,
-    input_messages_key='my_msg'
+    history_messages_key='my_msg'
 )
 
 for resp in do_message.stream(
